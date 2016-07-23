@@ -1,6 +1,7 @@
 import pygame
 from pygame import Rect
 import random
+from image_search import get_image
 
 pygame.init()
 pygame.font.init()
@@ -82,6 +83,14 @@ def draw_corporate_bullet_points(title, bullet_points):
         pygame.draw.circle(slideDisplay, (0,0,0), (int(200 + w*0.04 + 16),  int(h*0.2*(i + 1) + h * 0.04 + 21)), 10)
         drawText(slideDisplay, point, (0,0,0), (250 + w*0.04, h*0.2*(i + 1) + h * 0.04, w*0.92 - 250, h*0.16), arial_text, aa=True, bkg=(255,255,255), center=False)
 
+def draw_corporate_image_search(search_term):
+    draw_corporate_slide_template(1)
+    drawText(slideDisplay, search_term, (0,0,0), (200 + w*0.04, h*0.04, w*0.92 - 200, h*0.16), arial_title, aa=True, bkg=(255, 255, 255), center=False)
+    image = get_image(search_term)
+    if image:
+        iw, ih = image.get_size()
+        slideDisplay.blit(image, ((w - iw + 200) / 2, (h - ih + 100) / 2))
+
 # ===================
 #  90s Desgin Slides
 # ===================
@@ -104,8 +113,13 @@ def draw_90s_bullet_points(title, bullet_points):
         pygame.draw.circle(slideDisplay, (255, 255, 255), (int(w*0.04 + 16),  int(h*0.2*(i + 1) + h * 0.04 + 21)), 10)
         drawText(slideDisplay, point, (255, 255, 255), (50 + w*0.04, h*0.2*(i + 1) + h * 0.04, w*0.92 - 50, h*0.16), times_text, aa=True, bkg=(0,0,0), center=False)
 
-
-
+def draw_90s_image_search(search_term):
+    draw_90s_slide_template()
+    drawText(slideDisplay, search_term, (255, 255, 255), (w*0.04, h - 120, w*0.92, 100), times_title, aa=True, bkg=(0,0,0), center=True)
+    image = get_image(search_term)
+    if image:
+        iw, ih = image.get_size()
+        slideDisplay.blit(image, ((w - iw) / 2, (h - ih - 100) / 2))
 
 while not crashed:
 
@@ -113,9 +127,7 @@ while not crashed:
         if event.type == pygame.QUIT:
             crashed = True
 
-        print(event)
-
-    draw_90s_bullet_points("This is a title", ["FOO", "BAR", "BAZ"])
+    draw_corporate_image_search("Synergy")
     pygame.display.update()
     clock.tick(60)
 
