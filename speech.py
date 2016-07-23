@@ -19,6 +19,7 @@ from __future__ import division
 import contextlib
 import re
 import threading
+import processing
 
 from gcloud.credentials import get_credentials
 from google.cloud.speech.v1beta1 import cloud_speech_pb2 as cloud_speech
@@ -114,14 +115,22 @@ def request_stream(stop_audio, channels=CHANNELS, rate=RATE, chunk=CHUNK):
 
 
 def listen_print_loop(recognize_stream):
+    state = []
+    processor = processing.Processor()
     for resp in recognize_stream:
         if resp.error.code != code_pb2.OK:
             raise RuntimeError('Server error: ' + resp.error.message)
+        if len(resp.results) == 0:
+            continue
 
         # Display the transcriptions & their alternatives
-        for result in resp.results:
-            print(result.alternatives)
 
+        state = state[0:resp.result_index]
+        for i,result in enumerate(resp.results, start=resp.result_index):
+            text = result.alternatives[0].transcript
+            state.append(text)
+
+        # print(state)
         # Exit recognition if any of the transcribed phrases could be
         # one of our keywords.
         if any(re.search(r'\b(exit|quit)\b', alt.transcript)
@@ -129,6 +138,8 @@ def listen_print_loop(recognize_stream):
                for alt in result.alternatives):
             print('Exiting..')
             return
+
+        processor.process(state)
 
 
 def main():
