@@ -125,11 +125,14 @@ def draw_90s_image_search(search_term):
 def draw_slide(slide):
     bullet_funcs = [draw_90s_bullet_points, draw_corporate_bullet_points]
     title_funcs = [draw_90s_title_slide, draw_corporate_title_slide]
+    picture_funcs = [draw_90s_image_search, draw_corporate_image_search]
 
     if slide.type == "Bullets":
         bullet_funcs[slide.theme]("Stuff",slide.content)
     elif slide.type == "Heading":
         title_funcs[slide.theme](slide.content)
+    elif slide.type == "Picture":
+        picture_funcs[slide.theme](slide.content)
 
 def main(to_render):
     clock = pygame.time.Clock()

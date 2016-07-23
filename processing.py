@@ -16,14 +16,13 @@ def select_fancy_word(words):
 class Processor(object):
     def __init__(self):
         self.cur_loc = 0
+        self.seed = 912
     def process(self, parts):
         whole_text = u"".join(parts)
         words = whole_text.split(" ")
 
         slide = words[self.cur_loc:]
-        prev_words = words[:self.cur_loc]
-        h = str_hash(u" ".join(prev_words))
-        random.seed(h)
+        random.seed(self.seed)
 
         move_to_next = False
         slide_type = None
@@ -32,12 +31,18 @@ class Processor(object):
 
         # ============ Da Rules
 
-        if random.random() < 0.7: # Heading
+        picture_split = content.split("picture of")
+        if len(picture_split) > 1:
+            slide_type = "Picture"
+            content = picture_split[1]
+            if len(content.split(" ")) > 6:
+                move_to_next = True
+        elif random.random() < 0.7: # Heading
             slide_type = "Heading"
             max_words = 6
-            if random.random() < 0.5 and len(slide) > 0:
-                content = select_fancy_word(slide)
-                max_words = 6
+            # if random.random() < 0.2 and len(slide) > 0:
+            #     content = select_fancy_word(slide)
+            #     max_words = 6
             if len(slide) > max_words:
                 move_to_next = True
         else:
@@ -60,6 +65,7 @@ class Processor(object):
         if move_to_next:
             print("Moving on to next slide")
             self.cur_loc = len(words)
+            self.seed = random.randint(0,1000000)
 
         structure = Slide(slide_type, theme, content)
         print([self.cur_loc, slide])
