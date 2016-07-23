@@ -34,7 +34,7 @@ def search_image(term):
         if ((MAX_WIDTH / MAX_HEIGHT) * ow) > oh:
             image = pygame.transform.smoothscale(image, (MAX_WIDTH, int(MAX_HEIGHT*(oh * 1.0 / ow))))
         else:
-            image = pygame.transform.smoothscale(image, (int(MAX_HEIGHT * (ow * 1.0/ oh)), MAX_WIDTH))
+            image = pygame.transform.smoothscale(image, (int(MAX_WIDTH * (ow * 1.0/ oh)), MAX_HEIGHT))
         REQUESTS[term] = image
 
 def get_image(search_term):
