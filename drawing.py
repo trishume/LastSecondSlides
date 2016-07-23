@@ -1,22 +1,20 @@
 import pygame
 from pygame import Rect
 import random
-
-pygame.init()
-pygame.font.init()
+import processing
+import time
 
 w = 800
 h = 600
 
+pygame.init()
+pygame.font.init()
+
 slideDisplay = pygame.display.set_mode((w, h))
-clock = pygame.time.Clock()
-crashed = False
 arial_title = pygame.font.SysFont("Arial", 48, bold=True)
 arial_text = pygame.font.SysFont("Arial", 36)
 times_title = pygame.font.SysFont("Times New Roman", 54, bold=True)
 times_text = pygame.font.SysFont("Times New Roman", 36)
-
-slideDisplay.fill((255, 255, 255))
 
 def drawText(surface, text, color, rect, font, aa=False, bkg=None, center=True):
     rect = Rect(rect)
@@ -37,7 +35,7 @@ def drawText(surface, text, color, rect, font, aa=False, bkg=None, center=True):
         while font.size(text[:i])[0] < rect.width and i < len(text):
             i += 1
 
-        # if we've wrapped the text, then adjust the wrap to the last word      
+        # if we've wrapped the text, then adjust the wrap to the last word
         if i < len(text):
             i = text.rfind(" ", 0, i) + 1
         # render the line and blit it to the surface
@@ -104,20 +102,34 @@ def draw_90s_bullet_points(title, bullet_points):
         pygame.draw.circle(slideDisplay, (255, 255, 255), (int(w*0.04 + 16),  int(h*0.2*(i + 1) + h * 0.04 + 21)), 10)
         drawText(slideDisplay, point, (255, 255, 255), (50 + w*0.04, h*0.2*(i + 1) + h * 0.04, w*0.92 - 50, h*0.16), times_text, aa=True, bkg=(0,0,0), center=False)
 
+def draw_slide(slide):
+    bullet_funcs = [draw_90s_bullet_points, draw_corporate_bullet_points]
+    title_funcs = [draw_90s_title_slide, draw_corporate_title_slide]
 
+    if slide.type == "Bullets":
+        bullet_funcs[slide.theme]("Stuff",slide.content)
+    elif slide.type == "Heading":
+        title_funcs[slide.theme](slide.content)
 
+def main(to_render):
+    clock = pygame.time.Clock()
+    crashed = False
+    slideDisplay.fill((255, 255, 255))
 
-while not crashed:
+    while not crashed:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                crashed = True
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            crashed = True
+            # print(event)
 
-        print(event)
+        draw_slide(to_render[0])
+        # draw_90s_bullet_points("This is a title", ["FOO", "BAR", "BAZ"])
+        pygame.display.update()
+        time.sleep(0.1)
+        # clock.tick(60)
 
-    draw_90s_bullet_points("This is a title", ["FOO", "BAR", "BAZ"])
-    pygame.display.update()
-    clock.tick(60)
+    pygame.quit()
 
-pygame.quit()
-quit()
+if __name__ == '__main__':
+    main([processing.Slide("Bullets",1,["FOO","BAR","BAZ"])])

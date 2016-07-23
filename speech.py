@@ -114,12 +114,16 @@ def request_stream(stop_audio, channels=CHANNELS, rate=RATE, chunk=CHUNK):
             yield cloud_speech.StreamingRecognizeRequest(audio_content=data)
 
 
-def listen_print_loop(recognize_stream):
+def listen_print_loop(to_render, recognize_stream):
     state = []
+    print("doopadoop")
     processor = processing.Processor()
     for resp in recognize_stream:
+        print("feepadop")
         if resp.error.code != code_pb2.OK:
             raise RuntimeError('Server error: ' + resp.error.message)
+        if to_render[1]:
+            return
         if len(resp.results) == 0:
             continue
 
@@ -139,15 +143,16 @@ def listen_print_loop(recognize_stream):
             print('Exiting..')
             return
 
-        processor.process(state)
+        to_render[0] = processor.process(state)
 
 
-def main():
+def main(to_render):
+    print("lolwut")
     stop_audio = threading.Event()
     with cloud_speech.beta_create_Speech_stub(
             make_channel('speech.googleapis.com', 443)) as service:
         try:
-            listen_print_loop(
+            listen_print_loop(to_render,
                 service.StreamingRecognize(
                     request_stream(stop_audio), DEADLINE_SECS))
         finally:
@@ -157,4 +162,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main([None])
