@@ -1,5 +1,6 @@
 # LastSecondSlides
-Use the Google speech-to-text API to generate presentation slides as you talk!
+Use the Google speech-to-text API to generate presentation slides as you talk! A collaboration with [Marc Mailhot](http://mlht.ca/).
+Marc wrote the slide renderers and Bing Search with PyGame, and I wrote the Google Voice API interfacing code and the code to process the speech, decide on slide content and tie together the modules. Made for [TerribleHack IV](http://terriblehack.website/), a hackathon for intentionally funny and stupid projects.
 
 Includes two themes: 90s and corporate, as well as three slide types: heading, bullet points, and picture.
 
