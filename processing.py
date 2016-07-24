@@ -16,7 +16,7 @@ def select_fancy_word(words):
 class Processor(object):
     def __init__(self):
         self.cur_loc = 0
-        self.seed = 912
+        self.seed = 912929
     def process(self, parts):
         whole_text = u"".join(parts)
         words = whole_text.split(" ")

@@ -15,6 +15,7 @@ pygame.init()
 pygame.font.init()
 
 slideDisplay = pygame.display.set_mode((w, h))
+# slideDisplay = pygame.display.set_mode((w, h), pygame.FULLSCREEN)
 arial_title = pygame.font.SysFont("Arial", 48, bold=True)
 arial_text = pygame.font.SysFont("Arial", 36)
 times_title = pygame.font.SysFont("Times New Roman", 54, bold=True)
