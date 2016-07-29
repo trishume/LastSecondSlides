@@ -8,6 +8,14 @@ It can use Bing image search to find images based on what you say.
 
 **Note:** This was a fun 5-hour project for a fun hackathon, it stops working and crashes often due to multithreading issues we didn't bother to debug and isn't actually useful.
 
+## Demo Video
+
+See here:
+
+<https://www.youtube.com/watch?v=chgOZumnXQo>
+
+The voice recognition quality in the video is rather bad because it was a noisy room and I was using a crappy microphone.
+
 ## Getting it running
 
 1. Set up a virtualenv if you want and know what that is.
